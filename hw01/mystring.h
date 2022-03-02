@@ -2,6 +2,49 @@
 
 #include "basic.h"
 
+long int mystrtol(const char *nptr, char **endptr , int base) {
+	const char *cur = nptr;
+	i32 neg = 0, res = 0;
+
+	//skip space
+	while(isspace(*cur)) cur++;
+
+	//sign
+	if(*cur == '+') cur++;
+	else if(*cur == '-') {
+		neg = 1;
+		cur++;
+	}
+
+	// hexadecimal: skip "0x", "0X"
+	if(base == 0 || base == 16) {
+		if(*cur == '0' && (*(cur+1) | ' ') == 'x') {
+			cur += 2;
+			base = 16;
+		}
+	}
+
+	// octal: skip "0"
+	if(base == 0) base = (*cur == '0' ? 8 : 10);
+
+	while(*cur) {
+		i32 dig;
+		if(isdigit(*cur)) dig = *cur - '0';
+		else if(isxdigit(*cur)) dig = (*cur | ' ') - 'a';
+		else break;
+		if(dig >= base) break;
+		if(neg) {
+			res = (res < (LONG_MIN+dig)/base ? LONG_MIN : res * base - dig);
+		}
+		else {
+			res = (res > (LONG_MAX-dig)/base ? LONG_MAX : res * base + dig);
+		}
+		cur++;
+	}
+	if(endptr) *endptr = (char *) cur;
+	return res;
+}
+
 char *mystrchr(const char *s, int c) {
     while(s && *s != '\0') {
         if(*s == c) return (char *)s;
@@ -74,6 +117,6 @@ char *mystrtok(char *str, const char *delim) {
         return ret;
     }
     *end = '\0';
-    next = end +1;
+    next = end + 1;
     return ret;
 }
