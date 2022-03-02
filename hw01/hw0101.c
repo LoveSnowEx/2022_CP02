@@ -8,7 +8,7 @@ const u32 lookup[16] = {
 
 i32 hex2int(char c) {
 	if(isdigit(c)) return c-'0';
-	if(isalpha(c)) return 10 + (isupper(c) ? c-'A' : c-'a');
+	if(isalpha(c)) return 10 + ((c | ' ') -'a');
 	return -1;
 }
 
