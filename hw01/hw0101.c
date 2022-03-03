@@ -30,6 +30,10 @@ int main() {
 			return 1;
 		}
 		char c = (lookup[n2] << 4) + lookup[n1];
+		if((!c) ^ (i == len-2)) {
+			printf("error: '00' is not in the end\n");
+			return 1;
+		}
 		if(c && !isprint(c)) {
 			printf("error: unprintable character from hex: %c%c\n", s[i], s[i+1]);
 			return 1;
