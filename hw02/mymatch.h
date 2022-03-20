@@ -16,6 +16,10 @@ bool ismatch(const char *pStr, const char *pPattern) {
 }
 
 int mymatch(char ***pppList , const char *pStr, const char *pPattern) {
+	if(!pppList) {
+		printf("error: null pppList occured\n");
+		return -1;
+	}
 	if(!pStr) {
 		printf("error: null string occured\n");
 		return -1;
