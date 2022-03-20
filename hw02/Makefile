@@ -3,12 +3,12 @@ OBJDIR:=$(shell [ -d obj ] || mkdir obj && echo "obj")
 CFLAGS=-Wall -Wextra -std=gnu11
 LDFLAGS=-lm
 
-TARGETS=hw0201 hw0202 hw0203 #hw0104 hw0105
-hw0201_OBJ=hw0201.o
-hw0202_OBJ=hw0202.o
-hw0203_OBJ=madoka.o hw0203.o
-# hw0104_OBJ=hw0104.o
-# hw0105_OBJ=hw0105.o
+TARGETS=hw0201 hw0202 hw0203 hw0204 hw0205
+hw0201_OBJ=basic.o hw0201.o
+hw0202_OBJ=basic.o hw0202.o
+hw0203_OBJ=basic.o madoka.o hw0203.o
+hw0204_OBJ=basic.o mixed.o hw0204.o
+hw0205_OBJ=basic.o myvector.o hw0205.o
 
 .PHONY: all
 
