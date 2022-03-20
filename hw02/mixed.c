@@ -31,7 +31,7 @@ int mixed_simplified(sMixedNumber *pNumber) {
 }
 
 void mixed_read(const char *nptr, char **endptr, sMixedNumber *mixed) {
-	char *cur = (char *)nptr, buf[128];
+	char *cur = (char*)nptr, buf[128];
 	i32 a = 0, b = 0, c = 1;
 
 	// read a
@@ -57,7 +57,7 @@ void mixed_read(const char *nptr, char **endptr, sMixedNumber *mixed) {
 }
 
 void mixed_eval(const char *nptr, char **endptr, sMixedNumber *mixed) {
-	char *cur = (char *)nptr;
+	char *cur = (char*)nptr;
 	char operator = '+';  // dafault operator
 	sMixedNumber tmp1, tmp2;
 
