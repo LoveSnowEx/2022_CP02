@@ -31,5 +31,5 @@ int mymatch(char ***pppList , const char *pStr, const char *pPattern) {
 		if(ismatch(splitList[i], pPattern)) ppList[matchCnt++] = splitList[i];
 	}
 	*pppList = ppList;
-	return 0;
+	return matchCnt;
 }
