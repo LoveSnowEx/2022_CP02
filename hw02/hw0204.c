@@ -22,7 +22,7 @@ int main() {
 	sMixedNumber res;
 	mixed_eval(s, 0, &res);
 	mixed_print(buf, res);
-	printf("%s\n", buf);
+	printf("A: %s\n", buf);
 
 	return 0;
 }

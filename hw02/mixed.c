@@ -1,10 +1,5 @@
 #include "mixed.h"
 
-i32 abs(i32 n) {
-	if(n < 0) return -n;
-	return n;
-}
-
 i32 gcd(i32 a, i32 b) {
 	if(a < b) return gcd(b, a);
 	i32 tmp;
@@ -43,22 +38,21 @@ void mixed_read(const char *nptr, char **endptr, sMixedNumber *mixed) {
 	a = strtol(cur, &cur, 10);
 
 	// read b, c
-	size_t skip = strcspn(cur, "+-*/");
+	size_t len = 0;
 	if(*cur == '\\') {
 		sscanf(cur, "\\frac{%d}{%d}", &b, &c);
 		sprintf(buf, "\\frac{%d}{%d}", b, c);
-		if(skip != strlen(buf) || strncmp(cur, buf, skip) != 0) {
+		if(strncmp(cur, buf, (len = strlen(buf))) != 0) {
 			sprintf(warning_detail, "%s\n",cur);
 			longjmp(env_buffer, MIXED_READ_FAIL);
 		}
 	}
-	else if(skip != 0) {
+	else if(strcspn(cur, "+-*/") != 0) {
 		sprintf(warning_detail, "%s\n",cur);
 		longjmp(env_buffer, MIXED_READ_FAIL);
 	}
-	else mixed_set(mixed, a, b, c);
-
-	cur += skip;
+	mixed_set(mixed, a, b, c);
+	cur += len;
 	if(endptr) *endptr = cur;
 }
 
@@ -135,7 +129,7 @@ void mixed_print(char *dest, const sMixedNumber number) {
 	if(b < 0) {
 		a = -(abs(b)/c);
 		b = abs(b)%c;
-		if(a == 0) b = abs(b);
+		if(a == 0) b = -b;
 	}
 	else {
 		a = b/c;
