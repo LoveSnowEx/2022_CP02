@@ -16,7 +16,7 @@ i32 gcd(i32 a, i32 b) {
 	return b;
 }
 
-int simplified(sMixedNumber *pNumber) {
+int mixed_simplified(sMixedNumber *pNumber) {
 	if(pNumber->denominator == 0) {  // divide by zero
 		pNumber->numerator = 1;
 		return -1;
@@ -118,7 +118,7 @@ void mixed_set(sMixedNumber *pNumber , int32_t a, int32_t b, int32_t c) {
 	// denominator
 	pNumber->denominator = c;
 
-	if(simplified(pNumber) == -1) {
+	if(mixed_simplified(pNumber) == -1) {
 		if(a != 0 || b == 0) sprintf(warning_detail, "%d", a);
 		if(b) strncatf(warning_detail, "\\frac{%d}{%d}", 128, b, c);
 		longjmp(env_buffer, MIXED_SET_FAIL);
@@ -149,7 +149,7 @@ void mixed_print(char *dest, const sMixedNumber number) {
 void mixed_add(sMixedNumber *pNumber, const sMixedNumber r1, const sMixedNumber r2) {
 	pNumber->numerator = r1.numerator*r2.denominator + r2.numerator*r1.denominator;
 	pNumber->denominator = r1.denominator*r2.denominator;
-	if(simplified(pNumber) == -1) {
+	if(mixed_simplified(pNumber) == -1) {
 		char buf1[128], buf2[128];
 		mixed_print(buf1, r1);
 		mixed_print(buf2, r2);
@@ -162,7 +162,7 @@ void mixed_add(sMixedNumber *pNumber, const sMixedNumber r1, const sMixedNumber 
 void mixed_sub(sMixedNumber *pNumber, const sMixedNumber r1, const sMixedNumber r2) {
 	pNumber->numerator = r1.numerator*r2.denominator - r2.numerator*r1.denominator;
 	pNumber->denominator = r1.denominator*r2.denominator;
-	if(simplified(pNumber) == -1) {
+	if(mixed_simplified(pNumber) == -1) {
 		char buf1[128], buf2[128];
 		mixed_print(buf1, r1);
 		mixed_print(buf2, r2);
@@ -175,7 +175,7 @@ void mixed_sub(sMixedNumber *pNumber, const sMixedNumber r1, const sMixedNumber 
 void mixed_mul(sMixedNumber *pNumber, const sMixedNumber r1, const sMixedNumber r2) {
 	pNumber->numerator = r1.numerator*r2.numerator;
 	pNumber->denominator = r1.denominator*r2.denominator;
-	if(simplified(pNumber) == -1) {
+	if(mixed_simplified(pNumber) == -1) {
 		char buf1[128], buf2[128];
 		mixed_print(buf1, r1);
 		mixed_print(buf2, r2);
@@ -188,7 +188,7 @@ void mixed_mul(sMixedNumber *pNumber, const sMixedNumber r1, const sMixedNumber 
 void mixed_div(sMixedNumber *pNumber, const sMixedNumber r1, const sMixedNumber r2) {
 	pNumber->numerator = r1.numerator*r2.denominator;
 	pNumber->denominator = r1.denominator*r2.numerator;
-	if(simplified(pNumber) == -1) {
+	if(mixed_simplified(pNumber) == -1) {
 		char buf1[128], buf2[128];
 		mixed_print(buf1, r1);
 		mixed_print(buf2, r2);
