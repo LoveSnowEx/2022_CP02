@@ -33,7 +33,7 @@ typedef struct _sMixedNumber {
 static const sMixedNumber ZERO = {0, 1};
 static const sMixedNumber ONE = {1, 1};
 
-int simplified(sMixedNumber *pNumber);
+int mixed_simplified(sMixedNumber *pNumber);
 
 void mixed_read(const char *nptr, char **endptr, sMixedNumber *mixed);
 
