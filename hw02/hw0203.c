@@ -7,45 +7,30 @@
 #define MHSJMAX 4
 #define MJMAX 3
 
-#define container_of(ptr, type, member)					\
-	({								\
-		const typeof(((type *)0)->member ) *__mptr = (ptr);	\
-		(type *)((char *)__mptr - offsetof(type,member));	\
-	})
-
-#define new(TYPE, args...) TYPE ## _ctor(malloc(sizeof(TYPE)), ## args)
-#define delete(TYPE, ptr)	do				\
-				{				\
-					TYPE ## _dtor(ptr);	\
-					free(ptr);		\
-				}				\
-				while(0)
-
 int energy = 0;
 
 int main(void)
 {
-	
     int r = 0;
     int sj_cnt = SJMAX - MHSJMAX - MJMAX;
     Shoujo *sj_list[SJMAX] = {0};
     Mahoushoujo *mhsj_list[MHSJMAX] = {0};
     Majo *mj_list[MJMAX] = {0};
 
-    Mahoushoujo *homura = mhsj_list[1] = new(Mahoushoujo, "Homura", "Madoka..", Homura_skill);
-    Mahoushoujo *sayako = mhsj_list[2] = new(Mahoushoujo, "Sayaka", "QQ", Sayaka_skill);
-    Mahoushoujo *kyoko = mhsj_list[3] = new(Mahoushoujo, "Kyoko", "QQ", Kyoko_skill);
+    Mahoushoujo *homura = mhsj_list[1] = Mahoushoujo_ctor(malloc(sizeof(Mahoushoujo)),"Homura", "Madoka..", Homura_skill);
+    Mahoushoujo *sayako = mhsj_list[2] = Mahoushoujo_ctor(malloc(sizeof(Mahoushoujo)),"Sayaka", "QQ", Sayaka_skill);
+    Mahoushoujo *kyoko = mhsj_list[3] = Mahoushoujo_ctor(malloc(sizeof(Mahoushoujo)),"Kyoko", "QQ", Kyoko_skill);
 
-    mj_list[0] = new(Majo, "No name", "Majo is hopeless.");
+    mj_list[0] = Majo_ctor(malloc(sizeof(Majo)),"No name", "Majo is hopeless.");
 
-    sj_list[0] = new(Shoujo, "Madoka", "OAO");
+    sj_list[0] = Shoujo_ctor(malloc(sizeof(Shoujo)),"Madoka", "OAO");
 
     for (int i = 1; i < MHSJMAX; ++i)
         sj_list[i] = mhsj_list[i];
 
     sj_list[MHSJMAX] = mj_list[0];
     for (int i = MHSJMAX + MJMAX; i < SJMAX; ++i)
-        sj_list[i] = new(Shoujo, "shoujo", "shoujo is blessing.");
+        sj_list[i] = Shoujo_ctor(malloc(sizeof(Shoujo)),"shoujo", "shoujo is blessing.");
 
     while (true)
     {
@@ -84,14 +69,14 @@ int main(void)
             do {
                 r = rand() % (MHSJMAX - 1) + 1;
             } while (!mhsj_list[r]);
-            mj_list[0]->attack(mj_list[i], mhsj_list[r]);
+            mj_list[i]->attack(mj_list[i], mhsj_list[r]);
 
             if (sj_cnt == 0)
                 continue;
             do {
                 r = rand() % (SJMAX - MJMAX - MHSJMAX) + MJMAX + MHSJMAX;
             } while (!sj_list[r]);
-            mj_list[0]->kekkai(mj_list[i], sj_list[r]);
+            mj_list[i]->kekkai(mj_list[i], sj_list[r]);
         }
 
         for (int i = 0; i < SJMAX; ++i)
@@ -110,13 +95,13 @@ int main(void)
             }
             if (sj_list[i]->is_dead(sj_list[i]))
             {
-                delete(Shoujo, sj_list[i]);
+                Shoujo_dtor(sj_list[i]); free(sj_list[i]);
                 sj_list[i] = NULL;
                 if (i < MHSJMAX)
                 {
                     mhsj_list[i] = NULL;
                     if (i == 2)
-                        sj_list[2 + MHSJMAX] = mj_list[2] = new(Majo, "Nightmare", "Hahaha.");
+                        sj_list[2 + MHSJMAX] = mj_list[2] = Majo_ctor(malloc(sizeof(Majo)),"Nightmare", "Hahaha.");
                 }
                 else if (i < MHSJMAX + MJMAX)
                 {
@@ -128,9 +113,9 @@ int main(void)
         }
         if (((Shoujo *)homura)->kimoji <= -80)
         {
-            Mahoushoujo *homura = mhsj_list[0] = new(Mahoushoujo, "Madoka", "Mo daijobu daiyo", Madoka_skill);
+            Mahoushoujo *homura = mhsj_list[0] = Mahoushoujo_ctor(malloc(sizeof(Mahoushoujo)),"Madoka", "Mo daijobu daiyo", Madoka_skill);
         }
     }
-	
+
     return 0;
 }
