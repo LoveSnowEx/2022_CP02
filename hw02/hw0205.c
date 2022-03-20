@@ -5,7 +5,7 @@ int main() {
 	sVector *b = myvector_init();
 	sVector *c = myvector_init();
 
-	myvector_set(a, 1, 1, 1);
+	myvector_set(a, 1, 0, 1);
 	myvector_set(b, 1, 0, 2);
 
 	myvector_print(a, 1);
@@ -15,11 +15,11 @@ int main() {
 	myvector_print(b, 2);
 
 	double x, y, Tx = 3.1415926, Ty = 4.7227;
-	myvector_cvp(&x, &y, &Tx, &Ty, a, b);
+	i32 res = myvector_cvp(&x, &y, &Tx, &Ty, a, b);
 	
 	// myvector_print(c, 1);
 	// myvector_print(c, 2);
-	printf("%g %g\n", x, y);
+	printf("%d, %g %g\n", res, x, y);
 
 	free(a);
 	free(b);

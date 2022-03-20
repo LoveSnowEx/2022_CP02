@@ -62,7 +62,7 @@ int myvector_cvp(double *pX, double *pY, const double *pTx, const double *pTy, c
 	if(myvector_convert(&A, 1) == -1) return -1;
 	if(myvector_convert(&B, 1) == -1) return -1;
 	double denominator = A.data.c.x*B.data.c.y - B.data.c.x*A.data.c.y;
-	if(denominator == 0) return -1;
+	if(denominator == 0.0) return -1;
 	int m = roundf((B.data.c.y*(*pTx) - B.data.c.x*(*pTy)) / denominator);
 	int n = roundf((A.data.c.y*(*pTx) - A.data.c.x*(*pTy)) / -denominator);
 	*pX = m * A.data.c.x + n * B.data.c.x;
