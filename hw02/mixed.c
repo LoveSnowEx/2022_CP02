@@ -32,6 +32,7 @@ int mixed_simplified(sMixedNumber *pNumber) {
 
 void mixed_read(const char *nptr, char **endptr, sMixedNumber *mixed) {
 	char *cur = (char*)nptr, buf[128];
+	if(*cur == '(') cur++;
 	i32 a = 0, b = 0, c = 1;
 
 	// read a
@@ -47,12 +48,13 @@ void mixed_read(const char *nptr, char **endptr, sMixedNumber *mixed) {
 			longjmp(env_buffer, MIXED_READ_FAIL);
 		}
 	}
-	else if(strcspn(cur, "+-*/") != 0) {
+	else if(strcspn(cur, ")+-*/") != 0) {
 		sprintf(warning_detail, "%s\n",cur);
 		longjmp(env_buffer, MIXED_READ_FAIL);
 	}
 	mixed_set(mixed, a, b, c);
 	cur += len;
+	if(*cur == ')') cur++;
 	if(endptr) *endptr = cur;
 }
 
