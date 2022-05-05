@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
 	filename = poptGetArg(optCon);
 	printf(CLR_WHT"filename: %s\n"CLR_RST, filename);
 
-	sMmap *mmp = new_mmap(filename, "r", MAP_SHARED);
+	sMmap *mmp = new_mmap(filename, MAP_SHARED);
 	if(mmp == NULL) {
 		poptFreeContext(optCon);
 		if(lang) free(lang);

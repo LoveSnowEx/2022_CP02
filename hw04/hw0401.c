@@ -10,6 +10,12 @@ const sPixel24 white = {
 	.red = 255,
 };
 
+const sPixel24 black = {
+	.blue = 0,
+	.green = 0,
+	.red = 0,
+};
+
 int main(int argc, char *argv[]) {
 	char buf[BUFSIZ/2], filename[BUFSIZ], filename_layer1[BUFSIZ], filename_layer2[BUFSIZ], filename_overlap[BUFSIZ];
 	
@@ -34,14 +40,14 @@ int main(int argc, char *argv[]) {
 	pHeader->size = pHeader->offset + pHeader->bitmap_size;
 
 	// build output filename
-	sscanf(filename, "%s.bmp", buf);	
+	sscanf(filename, "%s.bmp", buf);
 	snprintf(filename_layer1, sizeof(filename_layer1), "%s_layer1.bmp", buf);
-	snprintf(filename_layer2, sizeof(filename_layer1), "%s_layer2.bmp", buf);
-	snprintf(filename_overlap, sizeof(filename_layer1), "%s_overlap.bmp", buf);
+	snprintf(filename_layer2, sizeof(filename_layer2), "%s_layer2.bmp", buf);
+	snprintf(filename_overlap, sizeof(filename_overlap), "%s_overlap.bmp", buf);
 
 	// mmap output files
 	i32 fd[3];
-	struct stat dstsb[3];
+	// struct stat dstsb[3];
 	char *pLayer1, *pLayer2, *pOverlap;
 
 	fd[0] = open(filename_layer1, O_RDWR|O_CREAT);
@@ -74,11 +80,9 @@ int main(int argc, char *argv[]) {
 	
 
 	sPixel24 (*pixels[3])[pHeader->width];
-	pixels[0] = pLayer1 + pHeader->offset;
-	pixels[1] = pLayer2 + pHeader->offset;
-	pixels[2] = pOverlap + pHeader->offset;
-	// pixels[0][0][0] = white;
-	// memcpy(pLayer1, &white, sizeof(sPixel24));
+	pixels[0] = (sPixel24(*)[pHeader->width])(pLayer1 + pHeader->offset);
+	pixels[1] = (sPixel24(*)[pHeader->width])(pLayer2 + pHeader->offset);
+	pixels[2] = (sPixel24(*)[pHeader->width])(pOverlap + pHeader->offset);
 
 	srand(time(NULL));
 	for(i32 i = 0; i < pHeader->height/2; ++i) {
@@ -87,24 +91,19 @@ int main(int argc, char *argv[]) {
 			i32 gray = to_gray(red, green, blue);
 			
 			i32 rnd = rand()%2;
-			sPixel24 gray_px = {
-				.blue = gray,
-				.green = gray,
-				.red = gray,
-			};
-			if(gray < (1<<7)) {  // draw gray
+			if(gray < (1<<7)) {  // draw black
 				for(i32 k = i*2; k < i*2+2; ++k) {
 					for(i32 l = j*2; l < j*2+2; ++l) {
-						pixels[0][k][l] = (k+l)%2 == rnd ? white : gray_px;
-						pixels[1][k][l] = (k+l)%2 == rnd ? gray_px : white;
-						pixels[2][k][l] = gray_px;
+						pixels[0][k][l] = (k+l)%2 == rnd ? white : black;
+						pixels[1][k][l] = (k+l)%2 == rnd ? black : white;
+						pixels[2][k][l] = black;
 					}	
 				}
 			}
 			else {  // draw white
 				for(i32 k = i*2; k < i*2+2; ++k) {
 					for(i32 l = j*2; l < j*2+2; ++l) {
-						pixels[0][k][l] = pixels[1][k][l] = pixels[2][k][l] = (k+l)%2 == rnd ? white : gray_px;
+						pixels[0][k][l] = pixels[1][k][l] = pixels[2][k][l] = (k+l)%2 == rnd ? white : black;
 					}
 				}
 			}

@@ -39,7 +39,12 @@ void printhighlight(const char *text, const size_t size, bool showlinenum, bool 
 			}
 		}
 	}
-	bool isnewline = true;
+	if(langidx == -1) {
+		fprintf(stderr, "error: language not found\n");
+		return;
+	}
+
+	bool isnewline = true, iscommentline = false, ismulticommentline = false, isstring = false;
 	size_t linenum = 0, i = 0;
 	while(i < size) {
 		if(showlinenum) {
@@ -49,6 +54,7 @@ void printhighlight(const char *text, const size_t size, bool showlinenum, bool 
 			}
 			if(text[i] == '\n') {
 				isnewline = true;
+				iscommentline = false;
 			}
 		}
 
@@ -59,6 +65,49 @@ void printhighlight(const char *text, const size_t size, bool showlinenum, bool 
 			continue;
 		}
 
+		if(iscommentline) {
+			printf("%c", text[i]);
+			++i;
+			continue;
+		}
+		else if(ismulticommentline) {
+			if(text[i] == '*' && text[i+1] == '/') ismulticommentline = false;
+			printf("%c%c", text[i], text[i+1]);
+			i += 2;
+			continue;
+		}
+		else {
+			if(text[i] == '/') {
+				if(text[i+1] == '/') {
+					iscommentline = true;
+					printf("%c%c", text[i], text[i+1]);
+					i += 2;
+					continue;
+				}
+				else if(text[i+1] == '*') {
+					ismulticommentline = true;
+					printf("%c%c", text[i], text[i+1]);
+					i += 2;
+					continue;
+				}
+			}
+		}
+		
+		if(text[i] == '\"' || text[i] == '\'') {  // switch isstring
+			isstring = !isstring;
+		}
+
+		if(isstring) {
+			if(text[i] == '\\') {  // find '\'
+				printf("%c%c", text[i], text[i+1]);
+				i += 2;
+				continue;
+			}
+			printf("%c", text[i]);
+			++i;
+			continue;
+		}
+	
 		static char sepcial[] = "_@#.";
 		// skip not alpha and not special
 		if(!isalpha(text[i]) && !strchr(sepcial, text[i])) {
