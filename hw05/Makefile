@@ -3,11 +3,10 @@ OBJDIR:=$(shell [ -d obj ] || mkdir obj && echo "obj")
 CFLAGS=-Wall -Wextra -std=gnu11
 LDFLAGS=-lm -lpopt
 
-TARGETS=hw0503
-hw0501_OBJ=basic.o bmp.o hw0401.o
-# hw0402_OBJ=basic.o hw0302.o
+TARGETS=hw0501 hw0502 hw0503 #test
+hw0501_OBJ=basic.o hw0501.o
+hw0502_OBJ=basic.o mmap.o hw0502.o
 hw0503_OBJ=basic.o mmap.o hw0503.o
-hw0404_OBJ=basic.o mmap.o hw0404.o
 
 test_OBJ=basic.o mmap.o test.o
 

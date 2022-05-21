@@ -1,7 +1,6 @@
 #include <popt.h>
 #include "basic.h"
 #include "mmap.h"
-#include "color.h"
 
 typedef struct _sBase64 {
 	union data {
@@ -59,14 +58,6 @@ int main(int argc, char *argv[]) {
 	// get context
 	poptContext optCon = poptGetContext(NULL, argc, (const char **)argv, optionsTable, 0);
 
-	// check if arg is too few
-	if(argc < 5) {
-		fprintf(stderr, "error: arguments is too few\n");
-		poptPrintUsage(optCon, stderr, 0);
-		poptFreeContext(optCon);
-		return 1;
-	}
-
 	// read opt
 	while((opt = poptGetNextOpt(optCon)) > 0) {
 		switch(opt) {
@@ -77,6 +68,14 @@ int main(int argc, char *argv[]) {
 			isdecode = true;
 			break;
 		}
+	}
+
+	// check if arg is too few
+	if(argc < 5) {
+		fprintf(stderr, "error: arguments is too few\n");
+		poptPrintUsage(optCon, stderr, 0);
+		poptFreeContext(optCon);
+		return 1;
 	}
 
 	// printf(CLR_WHT "inname: %s\noutname: %s\n" CLR_RST, inname, outname);
@@ -117,12 +116,23 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 
+	// check if file is exist
+	FILE *fp;
+	if((fp = fopen("inname", "r"))) fclose(fp);
+	else {
+		fprintf(stderr, "error: failed to open input file\n");
+		poptFreeContext(optCon);
+		if(inname) free(inname);
+		if(outname) free(outname);
+		exit(1);
+	}
+
 	sMmap *inmmp = new_mmap(inname, MAP_SHARED);
 	sMmap *outmmp = new_mmap(outname, MAP_SHARED);
 
 	// map failed
 	if(inmmp == NULL || outmmp == NULL) {
-		fprintf(stderr, "error: failed to map files\n");
+		fprintf(stderr, "error: failed to map file\n");
 		poptFreeContext(optCon);
 		if(inname) free(inname);
 		if(outname) free(outname);
