@@ -6,7 +6,7 @@ sMmap *new_mmap(const char *filename, const int32_t map_flags) {
 	int32_t fd, access_modes = O_RDWR | O_CREAT, prots = PROT_READ | PROT_WRITE;
 	struct stat sb;
 
-	if((fd = open(filename, access_modes)) == -1) {
+	if((fd = open(filename, access_modes, S_IRWXU|S_IRGRP|S_IROTH)) == -1) {
 		fprintf(stderr, "error: failed to open file\n");
 		return NULL;
 	}

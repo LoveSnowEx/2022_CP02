@@ -50,9 +50,9 @@ int main(int argc, char *argv[]) {
 	// struct stat dstsb[3];
 	char *pLayer1, *pLayer2, *pOverlap;
 
-	fd[0] = open(filename_layer1, O_RDWR|O_CREAT);
-	fd[1] = open(filename_layer2, O_RDWR|O_CREAT);
-	fd[2] = open(filename_overlap, O_RDWR|O_CREAT);
+	fd[0] = open(filename_layer1, O_RDWR|O_CREAT, S_IRWXU|S_IRGRP|S_IROTH);
+	fd[1] = open(filename_layer2, O_RDWR|O_CREAT, S_IRWXU|S_IRGRP|S_IROTH);
+	fd[2] = open(filename_overlap, O_RDWR|O_CREAT, S_IRWXU|S_IRGRP|S_IROTH);
 	if(fd[0] == -1 || fd[1] == -1 || fd[2] == -1) {
 		printf("error: failed to open output file descripteor\n");
 		return 1;
