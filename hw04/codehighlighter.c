@@ -38,10 +38,10 @@ void printhighlight(const char *text, const size_t size, bool showlinenum, bool 
 				break;
 			}
 		}
-	}
-	if(langidx == -1) {
-		fprintf(stderr, "error: language not found\n");
-		return;
+		if(langidx == -1) {
+			fprintf(stderr, "error: language not found\n");
+			return;
+		}
 	}
 
 	bool isnewline = true, iscommentline = false, ismulticommentline = false, isstring = false;
@@ -52,10 +52,11 @@ void printhighlight(const char *text, const size_t size, bool showlinenum, bool 
 				printf("%4lu|", ++linenum);
 				isnewline = false;
 			}
-			if(text[i] == '\n') {
-				isnewline = true;
-				iscommentline = false;
-			}
+		}
+
+		if(text[i] == '\n') {
+			isnewline = true;
+			iscommentline = false;
 		}
 
 		if(!showcolor) {
