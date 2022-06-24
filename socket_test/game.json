@@ -1,0 +1,35 @@
+{
+    "is_end": false,
+    "draw_pile": [
+        0
+    ],
+    "discard_pile": [
+        0
+    ],
+    "role_pile": [
+        0
+    ],
+    "character_pile": [
+        0
+    ],
+    "live_players": [
+        0
+    ],
+    "cur_player": 0,
+    "players": [
+        {
+            "id": 0,
+            "attack_range": 0,
+            "hp": 0,
+            "role": 0,
+            "character": 0,
+            "cards": [
+                0
+            ],
+            "desk": [
+                0
+            ]
+        }
+    ],
+    "total_players": 0
+}
